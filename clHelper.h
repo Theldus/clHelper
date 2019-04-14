@@ -68,6 +68,10 @@ struct cl_helper_context
 
 	cl_uint global_work_size;        /* Global work size (equivalent to grid
 	                                    size, in CUDA.               */
+	                                    
+	cl_ulong global_mem_size;        /* Global memory size.          */
+	
+	cl_ulong local_mem_size;         /* Local memory size.           */
 	                                  
 	/* Kernel data. */
 	size_t *localWorkSize;           /* Local work array.           */

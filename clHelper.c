@@ -34,10 +34,15 @@
 #include "clHelper.h"
 
 #ifdef CL_DEBUG
-	int debug_on = 1;
+	#define DEBUG_ON 1
 #else
-	int debug_on = 0;
+	#define DEBUG_ON 0
 #endif
+
+/* Memory sizes. */
+#define KB (1024)
+#define MB ((KB)*(KB))
+#define GB ((MB)*(MB))
 
 /**
  * Rounds up to the next power of two.
@@ -214,6 +219,8 @@ int clhStartContext(struct cl_helper_context *chc)
 			cl_uint max_items_dimensions;
 			size_t max_work_item_size[3];
 			cl_uint global_work_size;
+			cl_ulong global_mem_size;
+			cl_ulong local_mem_size;			
 			
 			/* Device name. */
 #ifdef CL_DEBUG
@@ -247,19 +254,34 @@ int clhStartContext(struct cl_helper_context *chc)
 					break;
 			}
 #endif
-			
+			/* Global memory. */
+			clGetDeviceInfo(devices[j], CL_DEVICE_GLOBAL_MEM_SIZE,
+				sizeof(global_mem_size), &global_mem_size, NULL);
+#ifdef CL_DEBUG
+			fprintf(stderr, "    Global memory size: %zd MiB\n", global_mem_size/MB);
+#endif
+
+			/* Local memory. */
+			clGetDeviceInfo(devices[j], CL_DEVICE_LOCAL_MEM_SIZE,
+				sizeof(local_mem_size), &local_mem_size, NULL);
+#ifdef CL_DEBUG
+			fprintf(stderr, "    Local memory size: %zd KiB\n", local_mem_size/KB);
+#endif		
+		
 			/* Max number of work-items in a work-group. */
 			clGetDeviceInfo(devices[j], CL_DEVICE_MAX_WORK_GROUP_SIZE,
 				sizeof(max_group_size), &max_group_size, NULL);
 #ifdef CL_DEBUG
 			fprintf(stderr, "    Max work-items: %zd\n", max_group_size);
 #endif			
+
 			/* Max work-item dimensions. */
 			clGetDeviceInfo(devices[j], CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS,
 				sizeof(max_items_dimensions), &max_items_dimensions, NULL);
 #ifdef CL_DEBUG
 			fprintf(stderr, "    Max work-items dimensions: %d\n", max_items_dimensions);
 #endif			
+
 			/* Max work-item size for dimensions. */
 			clGetDeviceInfo(devices[j], CL_DEVICE_MAX_WORK_ITEM_SIZES,
 				sizeof(max_work_item_size), &max_work_item_size, NULL);
@@ -292,8 +314,10 @@ int clhStartContext(struct cl_helper_context *chc)
 				chc->max_work_item_size[1] = max_work_item_size[1];
 				chc->max_work_item_size[2] = max_work_item_size[2];
 				chc->global_work_size = global_work_size;
+				chc->global_mem_size = global_mem_size;
+				chc->local_mem_size = local_mem_size;				
 				
-				if (!debug_on)
+				if (!DEBUG_ON)
 				{
 					free(devices);
 					free(platform_ids);
