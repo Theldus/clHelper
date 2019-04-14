@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2018 Davidson Francis <davidsondfgl@gmail.com>
+# Copyright (c) 2018-2019 Davidson Francis <davidsondfgl@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,34 +20,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-CC=gcc
-CLHELPER_DIR   = $(CURDIR)/../../
-CLHELPER_SRC   = $(CLHELPER_DIR)/clHelper.c
-CLHELPER_DEBUG = -DCL_DEBUG
+.PHONY: deviceInfo
+.PHONY: matrix
 
-# Operation system architecture
-OS_SIZE = $(shell uname -m | sed -e "s/i.86/32/" -e "s/x86_64/64/")
+all: deviceInfo matrix
 
-# Location of the CUDA Toolkit binaries and libraries
-CUDA_PATH       ?= /usr/local/cuda
-CUDA_INC_PATH   ?= $(CUDA_PATH)/include
-
-ifeq ($(OS_SIZE),32)
-	CUDA_LIB_PATH  ?= $(CUDA_PATH)/lib
-else
-	CUDA_LIB_PATH  ?= $(CUDA_PATH)/lib64
-endif
-
-INCLUDE  =  -I $(CLHELPER_DIR)/ -I $(CUDA_INC_PATH)
-CL_LIBS  =  OpenCL
-CFLAGS   =  -Wall -Werror -O3 -Wno-unused-variable
-CFLAGS  +=  $(INCLUDE) -std=c99 $(CLHELPER_DEBUG)
-LIB      =  -l$(CL_LIBS) -L $(CUDA_LIB_PATH)
-
-all: matrix
+deviceInfo:
+	$(MAKE) -C deviceInfo/
 
 matrix:
-	$(CC) $(CFLAGS) matrix.c $(CLHELPER_SRC) -o matrix $(LIB)
+	$(MAKE) -C matrix/
 
 clean:
-	rm -f matrix
+	rm -f deviceInfo/deviceInfo
+	rm -f matrix/matrix

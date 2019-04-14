@@ -44,10 +44,10 @@ CFLAGS   =  -Wall -Werror -O3 -Wno-unused-variable
 CFLAGS  +=  $(INCLUDE) -std=c99 $(CLHELPER_DEBUG)
 LIB      =  -l$(CL_LIBS) -L $(CUDA_LIB_PATH)
 
-all: matrix
+all: deviceInfo
 
-matrix:
-	$(CC) $(CFLAGS) matrix.c $(CLHELPER_SRC) -o matrix $(LIB)
+deviceInfo:
+	$(CC) $(CFLAGS) deviceInfo.c $(CLHELPER_SRC) -o deviceInfo $(LIB)
 
 clean:
-	rm -f matrix
+	rm -f deviceInfo
