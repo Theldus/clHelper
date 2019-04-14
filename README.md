@@ -1,7 +1,7 @@
-## clHelper   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+# clHelper   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 A small two files 'library' that you help you with OpenCL annoying stuffs.
 
-### Motivation
+## Motivation
 It's undeniable the power that OpenCL offers you, but honestly it's quite annoying to check the 
 platforms, devices, reading the kernel (from an array, or text file), creating contexts and so on.
 
@@ -23,7 +23,7 @@ cudaMemcpy(h_out, d_out...)
 ```
 Why we don't have such thing in OpenCL?
 
-### Library
+## Library
 clHelper tries to keep things simple and lets you focus on the kernel, that would be the most important thing
 right? In order to do that, clHelper implements a couple of functions that:
 - Finds and initializes the first GPU found
@@ -39,7 +39,7 @@ What clHelper don't do for you:
 
 But this is easy enough, even in OpenCL.
 
-### Getting started
+## Getting started
 You can get using OpenCL in a few steps:
 1) First of all, you need to get a *context* and initialize it, not the OpenCL, but clHelper context:
 ```
@@ -117,7 +117,7 @@ clhReleaseContext(&chc);
 Done =), with 8 simple steps you can play with OpenCL, easy right?
 A complete example can be found in the example/ folder.
 
-### No magic
+## No magic
 All data that clHelper needs to run are contained within the `struct cl_helper_context` structure. So if you want to invoke some OpenCL function directly, just use the data that is already there, at your disposal.
 
 Of the data contained in `struct cl_helper_context`, the most noteworthy are:
@@ -143,7 +143,7 @@ double time_ms;                  /* Time spent to execute the
 ```
 This field is always populated after running a kernel. It stores the runtime in milliseconds, so feel free to use it.
 
-### Building
+## Building
 As you already have noticed, there are only 2 files: a clHelper.c and a clHelper.h, feel free to move them to the folder of your project and only include them in the building process. There's a Makefile in example/ that can be used as a suggestion to build.
 
 ----------------------------
